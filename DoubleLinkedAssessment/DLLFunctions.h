@@ -1,6 +1,10 @@
 #pragma once
-#include <iostream>    
-/*
+#include <iostream>   
+
+class DLLFunctions
+{
+public:
+    /*
 Basic Node
 */
     struct Node
@@ -8,47 +12,33 @@ Basic Node
         int data;
         struct Node* next;
         struct Node* prev;
-    }*start;
-Node* headNode;
-Node* tailNode;
+    };
+    struct Node* head = NULL;
 
-int numOfNodes = 0;
+    int numOfNodes = 0;
 
-class DLLFunctions
-{
-public:
     DLLFunctions();
     ~DLLFunctions();
-//Protyping
+    //Protyping
 
     void MakeNode(int data);
 
-    void popFront(int data);
+    void popFront(struct Node* next_node, int n);
 
-    void popBack(int data);
+    void popBack(struct Node* prev_node, int data);
 
-    void delNode(int pos);
+    void delNode(struct Node** head_ref, struct Node* del);
 
     void display_dlist();
 
-    void delFirst();
-
-    void sort();
-
-    void delLast();
+    void sort(struct Node* start);
 
     bool isEmpty();
 
-    void swapNodes(Node* a, Node* b);
-
-    void noErrors();
+    void swapNodes(Node** head_ref, int x, int y);
 
     void ReverseNodes();
 
-    void numsOfNodes();
+    int numsOfNodes(struct Node* head);
 
-    DLLFunctions()
-    {
-        start = NULL;
-    }
 };

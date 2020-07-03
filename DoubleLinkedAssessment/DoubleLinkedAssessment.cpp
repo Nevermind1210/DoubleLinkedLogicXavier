@@ -2,106 +2,15 @@
 #include<cstdio>
 #include<cstdlib>
 #include "DLLFunctions.h"
-using namespace std;
 
 /*
  * Main: Conatins Menu
  */
 int main()
 {
-    int choice, element, position;
     DLLFunctions dl;
 
 
-    dl.popFront(10);
-    dl.popFront(10);
-    dl.popFront(10);
-    dl.popFront(10);
-
-    // dl.sort(); 
-
-    dl.count(); // count needs to return the number of items in the list
-    // std::cout << dl.count() << std::endl; //    
-
-
-    // TODDO:
-    // dl.push(10); // add 10 to the end of the collection
-    // dl.pop(); // removes the last item in the collection
-    // dl.pushFront(20); // adds 20 the beginning of the collection
-    // dl.popFront(); // removes the first item in the collection
-    // // THERE SHOULD NOT BE ANY COUT calls in any of the linked list methods
-
-    while (1)
-    {
-        cout << endl << "----------------------------" << endl;
-        cout << endl << "Operations on Doubly linked list" << endl;
-        cout << endl << "----------------------------" << endl;
-        cout << "1.Enter Node" << endl;
-        cout << "2.Add at begining" << endl;
-        cout << "3.Add after position" << endl;
-        cout << "4.Delete" << endl;
-        cout << "5.Display" << endl;
-        cout << "6.Count" << endl;
-        cout << "7.Reverse Nodes" << endl;
-        cout << "8.Quit" << endl;
-        cout << "Enter your choice : ";
-        cin >> choice;
-        switch (choice)
-        {
-        case 1:
-            cout << "Enter the element: ";
-            cin >> element;
-            dl.MakeNode(element);
-            cout << endl;
-            break;
-        case 2:
-            cout << "Enter the element: ";
-            cin >> element;
-            dl.add_begin(element);
-            cout << endl;
-            break;
-        case 3:
-            cout << "Enter the element: ";
-            cin >> element;
-            cout << "Insert Element after postion: ";
-            cin >> position;
-            dl.add_after(element, position);
-            cout << endl;
-            break;
-        case 4:
-            if (start == NULL)
-            {
-                cout << "List empty,nothing to delete" << endl;
-                break;
-            }
-            cout << "Enter the element for deletion: ";
-            cin >> element;
-            dl.delNode(element);
-            cout << endl;
-            break;
-        case 5:
-            dl.display_dlist();
-            cout << endl;
-            break;
-        case 6:
-            dl.numsOfNodes();
-            break;
-        case 7:
-            if (start == NULL)
-            {
-                cout << "List empty,nothing to reverse" << endl;
-                break;
-            }
-            dl.ReverseNodes();
-            cout << endl;
-            break;
-        case 8:
-            exit(1);
-        default:
-            cout << "Wrong choice" << endl;
-        }
-    }
-    return 0;
 }
 
 /*
