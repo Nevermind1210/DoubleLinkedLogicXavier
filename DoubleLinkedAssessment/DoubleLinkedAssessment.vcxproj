@@ -147,11 +147,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ConsoleApplication.cpp" />
     <ClCompile Include="DLLFunctions.cpp" />
     <ClCompile Include="DoubleLinkedAssessment.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ConsoleApplication.h" />
     <ClInclude Include="DLLFunctions.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

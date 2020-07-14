@@ -10,10 +10,12 @@ Basic Node
     struct Node
     {
         int data;
-        struct Node* next;
-        struct Node* prev;
+        struct Node* nextNode;
+        struct Node* prevNode;
     };
-    struct Node* head = NULL;
+    struct Node* headNode;
+    struct Node* tailNode;
+    
 
     int numOfNodes = 0;
 
@@ -21,24 +23,28 @@ Basic Node
     ~DLLFunctions();
     //Protyping
 
-    void MakeNode(int data);
+    void popFront(int data);
 
-    void popFront(struct Node* next_node, int n);
+    void popBack(int newData);
 
-    void popBack(struct Node* prev_node, int data);
+    void delNode(int pos);
 
-    void delNode(struct Node** head_ref, struct Node* del);
+    void delFirst();
+
+    void delLast();
 
     void display_dlist();
 
-    void sort(struct Node* start);
+    void Bsort();
 
     bool isEmpty();
 
-    void swapNodes(Node** head_ref, int x, int y);
+    void HowManyNodesExists();
 
-    void ReverseNodes();
+    void swapNodes(Node* x, Node* y);
 
     int numsOfNodes(struct Node* head);
+
+    void Error();
 
 };

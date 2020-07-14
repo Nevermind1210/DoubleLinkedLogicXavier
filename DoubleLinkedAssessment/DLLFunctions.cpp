@@ -1,105 +1,163 @@
 #include "DLLFunctions.h"
-#include <iostream>
+#include<iostream>
+#include<cstdio>
+#include<cstdlib>
 using namespace std;
+
 DLLFunctions::DLLFunctions()
 {
-
+    headNode = nullptr;
+    tailNode = nullptr;
 }
 
 DLLFunctions::~DLLFunctions()
 {
-
+   
 }
 
-void DLLFunctions::MakeNode(int data)
+void DLLFunctions::popFront(int newData)
 {
-    struct Node* newnode = (struct Node*) malloc(sizeof(struct Node));
-    newnode->data = data;
-    newnode->prev = NULL;
-    newnode->next = head;
-    
-    if (head != NULL)
-        head->prev = newnode;
-    head = newnode;
+    struct Node* newNode = new Node;
+    newNode->data = newData;
+    if (headNode == nullptr)
+    {
+        headNode = newNode;
+        newNode->prevNode = nullptr;
+        newNode->nextNode = nullptr;
+        tailNode = newNode;
+        numOfNodes++;
+    }
+    else
+    {
+        newNode->nextNode = headNode;
+        newNode->prevNode = nullptr;
+        headNode->prevNode = newNode;
+        headNode = newNode;
+        numOfNodes++;
+    }
 }
 
-void DLLFunctions::popFront(struct Node* next_node, int data)
+void DLLFunctions::popBack(int newData)
 {
-    if (next_node == NULL) {
-        printf("the given next node cannot be NULL");
+    struct Node* newNode = new Node;
+    newNode->data = newData;
+    if (headNode == nullptr)
+    {
+        headNode = newNode;
+        newNode->prevNode = nullptr;
+        newNode->nextNode = nullptr;
+        tailNode = newNode;
+        numOfNodes++;
+    }
+    else
+    {
+        newNode->prevNode = tailNode;
+        tailNode->nextNode = newNode;
+        newNode->nextNode = nullptr;
+        tailNode = newNode;
+        numOfNodes++;
+    }
+}
+
+void DLLFunctions::delNode(int pos)
+{
+    struct Node* temp;
+    temp = headNode;
+    if (headNode == tailNode)
+    {
+        if (headNode->data != pos)
+        {
+            cout << "could not delete" << endl;
+            return;
+        }
+        headNode = nullptr;
+        tailNode = nullptr;
+        delete temp;
+        return;
+    }
+    if (headNode->data == pos)
+    {
+        headNode = headNode->nextNode;
+        headNode->prevNode = nullptr;
+        delete temp;
+        return;
+    }
+    else if (tailNode->data == pos)
+    {
+        temp = tailNode;
+        tailNode = tailNode->prevNode;
+        tailNode->nextNode= nullptr;
+        delete temp;
+        return;
+    }
+    while (temp->data != pos)
+    {
+        temp = temp->nextNode;
+        if (temp == nullptr)
+        {
+            cout << "Element not found" << endl;
+            return;
+        }
+    }
+    temp->nextNode->prevNode = temp->prevNode;
+    temp->prevNode->nextNode = temp->nextNode;
+    delete temp;
+}
+
+void DLLFunctions::delFirst()
+{
+    if (headNode == nullptr){
         return;
     }
 
-    //allocating node
-    struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
-
-    //putting data 
-    new_node->data = data;
-
-    //put in the data 
-    new_node->data = data;
-
-    //Make prev of new node as prev of next_node
-    new_node->prev = next_node->prev;
-
-    //Make the prev of next_node as new_node
-    next_node->prev = new_node;
-
-    //Prev of next_node as new_node;
-    new_node->prev = new_node;
-
-    //Next of new_node's prev node
-    if (new_node->prev != NULL)
-        new_node->prev->next = new_node;
+    if (headNode == tailNode)///one element in the list
+    {
+        struct Node* cur;
+        cur = headNode;
+        headNode = nullptr;
+        tailNode = nullptr;
+        delete cur;
+        numOfNodes--;
+        return;
+    }
+    else
+    {
+        struct Node* cur;
+        cur = headNode;
+        headNode = headNode->nextNode;
+        headNode->prevNode = nullptr;
+        delete cur;
+        numOfNodes--;
+        return;
+    }
 }
 
-void DLLFunctions::popBack(struct Node* prev_node, int data)
+void DLLFunctions::delLast()
 {
-    if (prev_node == NULL) {
-        printf("given previous node cannot BE NULL");
+    if (headNode == nullptr) {
         return;
     }
 
-    //allocate the node
-    struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
-
-    //place in the inputted data
-    new_node->data = data;
-
-    //make new of new node as next of prev_node
-    new_node->next = prev_node->next;
-
-    //make the next of prev_node of new_node
-    prev_node->next = new_node;
-
-    //Make prev_node as previous of new_node
-    new_node->prev = prev_node;
-
-    // change previous of new_node's next node
-    if (new_node->next != NULL)
-        new_node->next->prev = new_node;
-}
-
-void DLLFunctions::delNode(struct Node** head_ref, struct Node* del)
-{
-    if (*head_ref == NULL || del == NULL)
+    if (headNode == tailNode)
+    {
+        struct Node* cur;
+        cur = headNode;
+        headNode = nullptr;
+        tailNode = nullptr;
+        delete cur;
+        numOfNodes--;
         return;
-
-    //if node thats being deleted is head node
-    if (*head_ref == del)
-        *head_ref = del->next;
-
-    //changing next only if node thats being deleted is NOT last node
-    if (del->next != NULL)
-        del->next->prev = del->prev;
-
-    //Changing prev only if node to be deleted is NOT first node
-    if (del->prev != NULL)
-        del->prev->next = del->next;
-
-    //free the memory thats using del
-    free(del);
-    return;
+    }
+    else
+    {
+        struct Node* cur;
+        cur = tailNode;
+        tailNode = tailNode->prevNode;
+        tailNode->nextNode = nullptr;
+        numOfNodes--;
+        delete cur;
+        return;
+    }
 }
 
 /*
@@ -107,41 +165,46 @@ void DLLFunctions::delNode(struct Node** head_ref, struct Node* del)
  */
 void DLLFunctions::display_dlist()
 {
-    struct Node* ptr;
-    ptr = head;
-    while (ptr != NULL) {
-        cout << ptr->data << " ";
-        ptr = ptr->next;
+    struct Node* temp;
+    temp = headNode;
+    while (temp != nullptr)
+    {
+        printf("%d->", temp->data);
+        temp = temp->nextNode;
     }
+    puts("");
 }
 
 
-void DLLFunctions::sort(struct Node* start)
+void DLLFunctions::Bsort()
 {
-    int swapped, i;
-    struct Node* ptr1;
-    struct Node* lptr = NULL;
-
-    if (start == NULL)
-        return;
-
-    do
+    Node* currentNode;
+    //sets current node = head node for the loop
+    currentNode = headNode;
+    bool sorted = false;
+    while (!sorted)
     {
-        swapped = 0;
-        ptr1 = start;
+        sorted = true;
+        currentNode = headNode;
 
-        while (ptr1->next != lptr)
+        //loop through number of nodes
+        for (int i = 0; i < numOfNodes; i++)
         {
-            if (ptr1->data > ptr1->next->data)
+            if (currentNode->nextNode != nullptr)
             {
-                swap(ptr1->data, ptr1->next->data);
-                swapped = 1;
+                if (currentNode->data > currentNode->nextNode->data)	 
+                {
+                    sorted = false;
+                    swapNodes(currentNode, currentNode->nextNode);
+                }
+                else
+                {
+                    currentNode->nextNode->prevNode = currentNode;
+                    currentNode = currentNode->nextNode;
+                }
             }
-            ptr1 = ptr1->next;
         }
-        lptr = ptr1;
     }
-    while (swapped);
 }
 
 
@@ -150,68 +213,67 @@ bool DLLFunctions::isEmpty()
     return numOfNodes == 0;
 }
 
-void DLLFunctions::swapNodes(Node** head_ref,int x, int y)
+void DLLFunctions::HowManyNodesExists()
 {
-    if (x == y)
-        return;
-
-    Node** a = NULL, ** b = NULL;
-
-    while (*head_ref) {
-
-        if ((*head_ref)->data == x) {
-            a = head_ref;
-        }
-
-        else if ((*head_ref)->data == y) {
-            b = head_ref;
-        }
-
-        head_ref = &((*head_ref)->next);
-    }
-
-    //if we have both a and b
-    //linked list swap current
-    //pointer and next pointer of these
-    if (a && b) {
-
-        swap(*a, *b);
-        swap(((*a)->next), ((*b)->next));
-    }
+    cout << "The number of nodes that exist:" << numOfNodes << " exists" << endl;
 }
 
-
-/*
- * Reverse Doubly Link List
- */
-void DLLFunctions::ReverseNodes()
+void DLLFunctions::swapNodes(Node* a, Node* b)
 {
-    struct Node* p1, * p2;
-    p1 = head;
-    p2 = p1->next;
-    p1->next = NULL;
-    p1->prev = p2;
-    while (p2 != NULL)
+    if (a == b)
     {
-        p2->prev = p2->next;
-        p2->next = p1;
-        p1 = p2;
-        p2 = p2->prev;
+        return;
     }
-    head = p1;
-    cout << "List Reversed" << endl;
+    // if swapping tailNode
+    if (b->nextNode == nullptr)
+    {
+        tailNode = a;
+        a->prevNode->nextNode = b;
+        b->prevNode = a->prevNode;
+        a->prevNode = b;
+        a->nextNode = b->nextNode;
+        b->nextNode = a;
+    }
+    // if swapping Node isnt headNode or tailNode
+    else if (a->prevNode != nullptr)
+    {
+        a->prevNode->nextNode = b;
+        b->prevNode = a->prevNode;
+        a->prevNode = b;
+        a->nextNode = b->nextNode;
+        b->nextNode = a;
+    }
+    // if swapping headNode
+    else if (a->prevNode == nullptr)
+    {
+        headNode = b;
+        if (b == tailNode)
+        {
+            tailNode = a;
+        }
+        b->prevNode = nullptr;
+        a->prevNode = b;
+        a->nextNode = b->nextNode;
+        b->nextNode = a;
+    }
 }
 
 int DLLFunctions::numsOfNodes(struct Node* head)
 {
     int count = 0;  // Initialize count 
     struct Node* current = head;  // Initialize current 
-    while (current != NULL)
+    while (current != nullptr)
     {
         count++;
-        current = current->next;
+        current = current->nextNode;
     }
     return count;
 }
 
-
+void DLLFunctions::Error()
+{
+    cout << "Put in the correct input dummy!" << endl;
+    system("pause");
+    cin.clear();
+    cin.ignore(cin.rdbuf()->in_avail());
+}
